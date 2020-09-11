@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { startFetchApod } from './store/actions/apod';
@@ -7,9 +7,11 @@ import Header from './components/Header';
 import Apod from './components/Apod';
 
 import './styles/App.scss';
+import 'react-datepicker/dist/react-datepicker.css';
+import Loader from './components/Loader';
 
 function App(props: any) {
-  let date = new Date(),
+  let [date, setDate] = useState(new Date()),
     year = date.getFullYear(),
     month = date.getMonth() + 1,
     day = date.getDate();
@@ -25,12 +27,16 @@ function App(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <div>
-      <Header />
-      <Apod data={props.apod.data} />
-    </div>
-  );
+  if (props.apod && props.apod.error) {
+    return <Loader />;
+  } else {
+    return (
+      <div>
+        <Header date={date} setDate={setDate} />
+        <Apod data={props.apod.data} />
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state: any) => ({
