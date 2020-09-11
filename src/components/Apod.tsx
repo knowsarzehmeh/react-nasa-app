@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button from './Button';
+import Loader from './Loader';
 
 type ApodProps = {
   data: {
@@ -15,6 +16,8 @@ type ApodProps = {
 };
 
 const Apod: React.FC<ApodProps> = ({ data }) => {
+  // if (!data) return <Loader />;
+
   return (
     <div className='container'>
       <aside className='brand-aside'>

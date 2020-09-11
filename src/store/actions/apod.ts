@@ -10,6 +10,16 @@ export const throwError = (error: string) => ({
   error,
 });
 
+export const fetchApodFromLocalStorage = (data: object) => async (
+  dispatch: any
+) => {
+  if (Object.keys(data).length > 0) {
+    return dispatch(fetchApod(data));
+  } else {
+    return dispatch(throwError('Data cannot be fetched'));
+  }
+};
+
 export const startFetchApod = (date: string = '') => async (dispatch: any) => {
   let url: string = `https://api.nasa.gov/planetary/apod?api_key=${process.env.REACT_APP_NASA_API_KEY}`;
 
@@ -20,7 +30,8 @@ export const startFetchApod = (date: string = '') => async (dispatch: any) => {
     response = await response.json();
 
     dispatch(fetchApod(response));
+    return response;
   } catch (error) {
-    dispatch(throwError(error.message));
+    return dispatch(throwError(error.message));
   }
 };
