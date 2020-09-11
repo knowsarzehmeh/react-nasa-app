@@ -19,7 +19,6 @@ export const startFetchApod = (date: string = '') => async (dispatch: any) => {
     let response = await fetch(url);
     response = await response.json();
 
-    console.log(response);
     dispatch(fetchApod(response));
   } catch (error) {
     dispatch(throwError(error.message));
