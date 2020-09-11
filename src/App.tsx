@@ -28,7 +28,7 @@ function App(props: any) {
   return (
     <div>
       <Header />
-      <Apod data={{}} />
+      <Apod data={props.apod.data} />
     </div>
   );
 }
