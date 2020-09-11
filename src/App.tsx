@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-function App() {
+import { startFetchApod } from './store/actions/apod';
+
+import Header from './components/Header';
+import Apod from './components/Apod';
+
+import './styles/App.scss';
+
+function App(props: any) {
+  let date = new Date(),
+    year = date.getFullYear(),
+    month = date.getMonth() + 1,
+    day = date.getDate();
+
+  const addZeros = (num: number): string =>
+    num < 10 ? `0${num}` : num.toString();
+
+  const today: string = `${year}-${addZeros(month)}-${addZeros(day)}`;
+
+  useEffect(() => {
+    props.fetchApod(today);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <Apod data={{}} />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state: any) => ({
+  apod: state,
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  fetchApod: (date?: string) => dispatch(startFetchApod(date)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

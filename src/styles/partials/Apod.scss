@@ -1,0 +1,33 @@
+.apod {
+  max-width: 760px;
+  position: relative;
+}
+
+.apod__copyright {
+  color: lighten($color: $blue, $amount: 30);
+  font-style: italic;
+  font-size: $font-size-small;
+}
+
+.apod__title {
+  font-size: $font-size-large;
+  letter-spacing: 0.2rem;
+  margin-top: $l-size;
+  padding: $m-size;
+  text-align: center;
+}
+
+.apod__explanation {
+  font-size: $font-size-small;
+}
+
+.apod__media {
+  margin: 0 auto;
+  margin-bottom: $s-size;
+  width: 50rem;
+
+  img {
+    height: 100%;
+    width: 100%;
+  }
+}
