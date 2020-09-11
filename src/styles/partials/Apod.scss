@@ -2,6 +2,11 @@
   //   max-width: 760px;
   display: flex;
   position: relative;
+
+  @media (max-width: 767.98px) {
+    display: block;
+    position: inherit;
+   }
 }
 
 .apod__media {
@@ -43,10 +48,30 @@
   position: relative;
   //   text-align: left;
   text-transform: uppercase;
+
+  @media (max-width: 767.98px) {
+    left: 0;
+    padding: 0;
+   }
 }
 
 .apod__explanation {
   font-size: $font-size-small;
   line-height: 1.5;
   margin-bottom: $xl-size-pc;
+}
+
+.center-items {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.space-between-header {
+  @media (max-width: 767.98px) {
+    justify-content: space-between;
+   }
+
+
+ 
 }

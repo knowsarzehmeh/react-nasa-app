@@ -9,7 +9,7 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
   return (
     <header className='header'>
-      <div className='container'>
+      <div className='container space-between-header'>
         <h3 className='header__brand'>P-Hero Nasa Facts</h3>
         {/* <DatePicker
           className='custom-date-picker'
