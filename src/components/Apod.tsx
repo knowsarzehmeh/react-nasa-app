@@ -42,7 +42,7 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
             <div className='controls'>
               <Button classes='button--prev cursor-pointer'>Prev Day</Button>
               <Button classes='button--next cursor-pointer'>Next Day</Button>
-              <Error />
+              {/* <Error /> */}
             </div>
           </div>
         </div>
