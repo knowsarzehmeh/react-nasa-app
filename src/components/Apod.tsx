@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button from './Button';
+import Error from './Error/Error';
 
 type ApodProps = {
   data: {
@@ -38,6 +39,7 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
             <div className='controls'>
               <Button classes='button--prev cursor-pointer'>Prev Day</Button>
               <Button classes='button--next cursor-pointer'>Next Day</Button>
+              <Error />
             </div>
           </div>
         </div>

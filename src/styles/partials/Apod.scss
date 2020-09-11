@@ -2,6 +2,11 @@
   //   max-width: 760px;
   display: flex;
   position: relative;
+
+  @media (max-width: 767.98px) {
+    display: block;
+    position: inherit;
+   }
 }
 
 .apod__media {
@@ -55,9 +60,17 @@
   margin-bottom: $xl-size-pc;
 }
 
+.center-items {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .space-between-header {
   @media (max-width: 767.98px) {
     justify-content: space-between;
    }
+
+
  
 }
