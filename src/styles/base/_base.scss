@@ -35,7 +35,6 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-
 }
 
 .container-fluid {
@@ -80,7 +79,10 @@ body {
 
 .space-between-header {
   @media (max-width: 767.98px) {
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    align-items: flex-start;
   }
 }
 
@@ -98,7 +100,7 @@ body {
   h3 {
     padding: $s-size;
   }
-  @media (max-width: 767.98px) {
+  @media (max-width: $md-devices) {
     display: none;
   }
 }

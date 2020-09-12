@@ -100,7 +100,7 @@ const Card: React.FC<CardProps> = ({
       };
       
     return (
-    <div className="center">
+    <div className="center" >
           <Modal
         showModal={showModal.state}
         variant={showModal.variant}
@@ -110,12 +110,13 @@ const Card: React.FC<CardProps> = ({
       >
         <h2 style={{ color: 'black' }}>{showModal.message}</h2>
       </Modal>
-    <div className="property-card">
-      <div  onClick={()=> ClickHandler(data.date)}>
+    <div className="property-card" onClick={(e)=> {ClickHandler(data.date)}}>
+      <div onClick={(e)=> {ClickHandler(data.date)}}>
         <div>
         { media_type === 'image' ? (
             <img src={url} className='media' alt={title} />
           ) : (
+              <div>
             <iframe
              
               title={title}
@@ -126,6 +127,7 @@ const Card: React.FC<CardProps> = ({
               allowFullScreen
             //   className='media'
             />
+            </div>
           )}
             
           <div className="property-image-title">
@@ -139,7 +141,7 @@ const Card: React.FC<CardProps> = ({
       <div>
     
     
-        <div className="property-social-icons" onClick={()=> toggleFavorite(data)}>
+        <div className="property-social-icons" onClick={(e)=> { e.stopPropagation(); toggleFavorite(data)}}>
         <i  className={isFavorite ? 'fa fa-heart' : 'fa fa-heart-o'}  aria-hidden='true'></i> {/* fa-heart */}
         </div>
       </div>

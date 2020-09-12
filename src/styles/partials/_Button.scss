@@ -16,7 +16,6 @@
   &:active {
     border: 2px solid $blue !important;
     background-color: rgb(193, 210, 241);
-
   }
 
   &:disabled {
@@ -54,6 +53,10 @@
   right: 1%;
   // top: 27%;
   z-index: 10;
+
+  @media (max-width: $sm-devices) {
+    bottom: 30%;
+  }
 
   &::before {
     background-color: inherit;
