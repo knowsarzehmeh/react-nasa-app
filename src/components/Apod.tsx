@@ -80,7 +80,7 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
         </Button>
         <div className='apod__media col-7'>
           {data && data.media_type === 'image' ? (
-            <img src={data.url} className='media' alt='' />
+            <img src={data.url} className='media' alt={data.title} />
           ) : (
             <iframe
               title={data.title}

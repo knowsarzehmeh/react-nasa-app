@@ -11,6 +11,16 @@
     color: $blue;
     transition: background-color 0.5s;
   }
+
+  &:active {
+    border: 2px solid $blue !important;
+    background-color: rgb(193, 210, 241);
+
+  }
+}
+
+.button--mini {
+  padding: 0.5rem;
 }
 
 .button--prev {
