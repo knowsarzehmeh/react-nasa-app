@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button from './Button';
+import Modal from './Modal';
 // import Loader from './Loader';
 // import Error from './Error/Error';
 
@@ -19,14 +20,23 @@ type ApodProps = {
 const Apod: React.FC<ApodProps> = ({ data }) => {
   // if (!data) return <Loader />;
 
+ const [showModal, setShowModal] = React.useState(false)
+
   return (
     <div className='container-fluid'>
+       <Modal showModal={showModal} closeModal={()=> {setShowModal(false)}}>
+            <div 
+                style={{color:'black'}}
+            >
+              Alert
+            </div>
+          </Modal>
       <aside className='brand-aside'>
         <h3>The Astronomical picture of the day</h3>
       </aside>
       <div className='apod'>
-        <Button classes='button--favorite' title='mark as favorite'>
-          <i className='fa fa-heart-o' aria-hidden='true'></i> {/* fa-heart */}
+        <Button onClick={()=> {return setShowModal(!showModal)}} classes='button--favorite' title='mark as favorite'  >
+          <i className='fa fa-heart-o' aria-hidden='true' ></i> {/* fa-heart */}
         </Button>
         <div className='apod__media col-7'>
           <img src={data && data.url} className='' alt='' />

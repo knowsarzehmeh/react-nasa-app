@@ -4,12 +4,13 @@ type ButtonProps = {
   children: ReactNode;
   classes?: string;
   title?: string;
+  onClick?: () => any
 };
 
-const Button: React.FC<ButtonProps> = ({ children, classes, title }) => {
+const Button: React.FC<ButtonProps> = ({ children, classes, title, onClick }) => {
   classes = classes && classes.length > 0 ? 'button ' + classes : 'button';
   return (
-    <button title={title} className={classes}>
+    <button onClick={onClick} title={title} className={classes}>
       {children}
     </button>
   );
