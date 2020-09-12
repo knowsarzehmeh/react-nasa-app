@@ -16,6 +16,7 @@ import Error from './components/Error/Error';
 // import Modal from './components/Modal';
 
 function App(props: any) {
+  const [loading, setLoading] = useState(true);
   let [date, setDate] = useState(new Date()),
     year = date.getFullYear(),
     month = date.getMonth() + 1,
@@ -27,34 +28,42 @@ function App(props: any) {
   const today: string = `${year}-${addZeros(month)}-${addZeros(day)}`;
 
   useEffect(() => {
-    // load picture of the day from local storage
-    let picOfTheDay: any = localStorage.getItem('poftd');
 
-    if (
-      picOfTheDay === null ||
-      new Date().getDate() !== new Date(today).getDate()
-    ) {
-      console.log('Fetching From Api...');
-      props.fetchApod(today).then((result: any) => {
-        if (
-          date.getDate() === new Date().getDate() &&
-          typeof result !== undefined
-        ) {
-          localStorage.setItem('poftd', JSON.stringify(result));
-        }
-      });
-    } else if (
-      new Date().getDate() -
-        new Date(JSON.parse(picOfTheDay).date).getDate() ===
-      0
-    ) {
-      console.log('Fetching From Store...');
-      picOfTheDay = JSON.parse(picOfTheDay);
-      props.fetchFromStore(picOfTheDay);
-    }
+   loadPictureOfTheDay()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
+
+  const loadPictureOfTheDay = () => {
+        // load picture of the day from local storage
+        let picOfTheDay: any = localStorage.getItem('poftd');
+
+        if (
+          picOfTheDay === null ||
+          new Date().getDate() !== new Date(today).getDate()
+        ) {
+          console.log('Fetching From Api...');
+          props.fetchApod(today).then((result: any) => {
+            if (
+              date.getDate() === new Date().getDate() &&
+              typeof result !== undefined
+            ) {
+             localStorage.setItem('poftd', JSON.stringify(result));
+              
+             
+            }
+          });
+        } else if (
+          new Date().getDate() -
+            new Date(JSON.parse(picOfTheDay).date).getDate() ===
+          0
+        ) {
+          console.log('Fetching From Store...');
+          picOfTheDay = JSON.parse(picOfTheDay);
+          props.fetchFromStore(picOfTheDay);
+        }
+        setLoading(false)
+  }
 
   const nextDay = () => {
     var day = new Date('Apr 30, 2000');
@@ -76,10 +85,11 @@ function App(props: any) {
     );
   } else {
     return (
+      loading ? <Loader /> : 
       <div className='padding-left-right'>
         <Header date={date} setDate={setDate} />
         <Apod data={props.apod.data} />
-      </div>
+      </div> 
     );
   }
 }
