@@ -13,13 +13,14 @@ import Apod from './components/Apod';
 
 import './styles/App.scss';
 import 'react-datepicker/dist/react-datepicker.css';
-import Loader from './components/Loader';
+// import Loader from './components/Loader';
 import Error from './components/Error/Error';
 // import Modal from './components/Modal';
 import formatDate from './helper/formatDate';
 
 function App(props: any) {
   let [date, setDate] = useState(new Date());
+  const [disableButton, setDisableButton] = useState(false);
 
   const today: string = formatDate(date);
 
@@ -53,15 +54,6 @@ function App(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
-  const nextDay = () => {
-    var day = new Date('Apr 30, 2000');
-    console.log(day); // Apr 30 2000
-
-    var nextDay = new Date(day);
-    nextDay.setDate(day.getDate() + 1);
-    console.log(nextDay);
-  };
-
   if (props.apod && (props.apod.error || !props.apod.data)) {
     return (
       <div className='center-flex'>
@@ -75,8 +67,17 @@ function App(props: any) {
   } else {
     return (
       <div className='padding-left-right'>
-        <Header date={date} setDate={setDate} />
-        <Apod data={props.apod.data} />
+        <Header
+          disableButton={disableButton}
+          setDisabledButton={setDisableButton}
+          date={date}
+          setDate={setDate}
+        />
+        <Apod
+          disableButton={disableButton}
+          setDisabledButton={setDisableButton}
+          data={props.apod.data}
+        />
       </div>
     );
   }

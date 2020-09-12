@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Button from './Button';
 import { FAVORITES } from '../store/types/index';
@@ -7,6 +7,7 @@ import { startFetchApod } from '../store/actions/apod';
 import { connect } from 'react-redux';
 
 import formatDate from '../helper/formatDate';
+import { startSetDateQuery } from '../store/actions/date';
 // import Loader from './Loader';
 // import Error from './Error/Error';
 
@@ -20,9 +21,16 @@ type ApodProps = {
     hdurl: string;
     explanation: string;
   };
+  disableButton: boolean;
+  setDisabledButton: Function;
 };
 
-const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
+const Apod: React.FC<ApodProps> = ({
+  data,
+  disableButton,
+  setDisabledButton,
+  ...props
+}) => {
   // if (!data) return <Loader />;
   const [showModal, setShowModal] = useState({
     state: false,
@@ -31,21 +39,42 @@ const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
   });
 
   const [queryDate, setQueryDate] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
-
+  const [isFavorite, setIsFavorite] = useState(false);
+  const buttonRef: React.MutableRefObject<undefined> = useRef(undefined);
   const checkDateDiff = () => {
     const date = new Date(queryDate);
     const today = new Date();
     if (!queryDate && today) {
-      setDisableButton(true);
+      setDisabledButton(true);
     } else if (today.getDate() === date.getDate()) {
-      setDisableButton(true);
+      setDisabledButton(true);
     }
   };
 
   useEffect(() => {
     checkDateDiff();
-  }, [queryDate]);
+    checkIsFavorite(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryDate, isFavorite, data]);
+
+  const checkIsFavorite = (data: any) => {
+    let favorites: object[] = [];
+    // check get item is the store
+    let favoritesStore = localStorage.getItem(FAVORITES);
+
+    if (favoritesStore === null) return;
+
+    // item in the favorite store
+    const storeData: string | null = localStorage.getItem(FAVORITES);
+
+    favorites = storeData !== null && JSON.parse(storeData);
+
+    const found = favorites.findIndex(
+      (item: any) => item.title === data.title || item.url === data.url
+    );
+
+    found !== -1 ? setIsFavorite(true) : setIsFavorite(false);
+  };
 
   const toggleFavorite = (data: any) => {
     let favorites: object[] = [];
@@ -75,6 +104,9 @@ const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
           variant: 'small',
           message: 'Marked as Favourite',
         });
+
+        setIsFavorite(true);
+        (buttonRef.current as any).classList.add('button--marked');
       } else {
         //  remove from favorite
         favorites.splice(found, 1);
@@ -84,6 +116,9 @@ const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
           variant: 'small',
           message: 'Unmarked as Favourite',
         });
+
+        setIsFavorite(false);
+        (buttonRef.current as any).classList.remove('button--marked');
       }
     }
   };
@@ -101,7 +136,9 @@ const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
     }
     const date = formatDate(new Date(day));
     setQueryDate(date);
-    setDisableButton(false);
+    (props as any).dateQuery(date);
+
+    setDisabledButton(false);
     (props as any).queryApod(date);
   };
 
@@ -121,6 +158,7 @@ const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
     }
     const date = formatDate(new Date(day));
     setQueryDate(date);
+    (props as any).dateQuery(date);
     (props as any).queryApod(date);
   };
 
@@ -141,10 +179,17 @@ const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
       <div className='apod'>
         <Button
           ClickHandler={() => toggleFavorite(data)}
-          classes='button--favorite'
+          classes={
+            isFavorite ? 'button--favorite button--marked' : 'button--favorite'
+          }
           title='mark as favorite'
+          customRef={buttonRef}
         >
-          <i className='fa fa-heart-o' aria-hidden='true'></i> {/* fa-heart */}
+          <i
+            className={isFavorite ? 'fa fa-heart' : 'fa fa-heart-o '}
+            aria-hidden='true'
+          ></i>
+          {/* fa-heart */}
         </Button>
         <div className='apod__media col-7'>
           {data && data.media_type === 'image' ? (
@@ -194,6 +239,7 @@ const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   queryApod: (date?: string) => dispatch(startFetchApod(date)),
+  dateQuery: (date: string) => dispatch(startSetDateQuery(date)),
 });
 
 export default connect(undefined, mapDispatchToProps)(Apod);

@@ -4,9 +4,15 @@ import React, { useEffect, useState } from 'react';
 type HeaderProps = {
   date: Date;
   setDate: (initalState: Date | ((previousState: Date) => Date)) => void;
+  disableButton: boolean;
+  setDisabledButton: Function;
 };
 
-const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
+const Header: React.FC<HeaderProps> = ({
+  date,
+  setDate,
+  setDisabledButton,
+}) => {
   const [maxDate, setMaxDate] = useState('');
   // const myDate:any = useRef();
   useEffect(() => {
@@ -26,6 +32,9 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
 
   const handleSetDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(event.target.value);
+    if (new Date()) {
+      setDisabledButton(true);
+    }
     setDate(date);
   };
 
