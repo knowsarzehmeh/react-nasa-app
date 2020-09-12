@@ -6,6 +6,8 @@ import {
   fetchApodFromLocalStorage,
 } from './store/actions/apod';
 
+import { PICOFTHEDAY } from './store/types/index';
+
 import Header from './components/Header';
 import Apod from './components/Apod';
 
@@ -28,7 +30,7 @@ function App(props: any) {
 
   useEffect(() => {
     // load picture of the day from local storage
-    let picOfTheDay: any = localStorage.getItem('poftd');
+    let picOfTheDay: any = localStorage.getItem(PICOFTHEDAY);
 
     if (
       picOfTheDay === null ||
@@ -40,7 +42,7 @@ function App(props: any) {
           date.getDate() === new Date().getDate() &&
           typeof result !== undefined
         ) {
-          localStorage.setItem('poftd', JSON.stringify(result));
+          localStorage.setItem(PICOFTHEDAY, JSON.stringify(result));
         }
       });
     } else if (
@@ -63,16 +65,17 @@ function App(props: any) {
     var nextDay = new Date(day);
     nextDay.setDate(day.getDate() + 1);
     console.log(nextDay);
-  }
+  };
 
   if (props.apod && (props.apod.error || !props.apod.data)) {
-    return(
+    return (
       <div className='center-flex'>
-     <Error 
-    errorMessage={props.apod.error}
-    onClick={ () => window.location.reload()}
-    actionTitle='refresh'  />
-    </div>
+        <Error
+          errorMessage={props.apod.error}
+          onClick={() => window.location.reload()}
+          actionTitle='refresh'
+        />
+      </div>
     );
   } else {
     return (
