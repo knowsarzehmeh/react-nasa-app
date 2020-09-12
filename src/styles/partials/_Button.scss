@@ -17,10 +17,17 @@
     background-color: rgb(193, 210, 241);
 
   }
+
+  &:disabled {
+    background-color: lighten($color: $blue, $amount: 30);
+    cursor: none;
+    pointer-events: none;
+  }
 }
 
 .button--mini {
   padding: 0.5rem;
+  position: relative;
 }
 
 .button--prev {

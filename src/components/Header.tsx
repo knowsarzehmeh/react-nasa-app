@@ -11,14 +11,14 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
-  const [showModal, setShowModal] = useState({ state: false, variant: 'small', message: undefined});
+  const [showModal, setShowModal] = useState({ state: false, variant: 'small', type:'', message: [<></>]});
   const [maxDate, setMaxDate] = useState('');
-  const [favourites , setFavourites] = useState([]);
+  // const [favourites , setFavourites] = useState([]);
   // const myDate:any = useRef();
   useEffect(() => {
     disableFutureDate();
     //@ts-ignore
-    setFavourites(localStorage.getItem(FAVORITES))
+    // setFavourites(JSON.parse(localStorage.getItem(FAVORITES)))
   }, []);
 
   const disableFutureDate = () => {
@@ -35,21 +35,40 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
   const handleSetDate = (event: React.ChangeEvent<HTMLInputElement>) => {
   
     const date = new Date(event.target.value);
-    console.log('date', date);
-    !date ? alert('Date not in the right format') : setDate(date);
+    setDate(date);
   };
 
   const showFavoriteList = async () => {
 
- 
-   //@ts-ignore
-    console.log(JSON.parse(favourites))
-    // favorites.map(data => <Card title={data.copyright} />)
+    //@ts-ignore
+    const favourites = JSON.parse(localStorage.getItem(FAVORITES))
+    if(favourites === null) return alert("You have no favourites")
     setShowModal({
       state: true,
       variant: '',
-      message: undefined
+      type:'',
+      message: favourites.map((data:any) => <Card key={data.title} title={data.title} description={data.explanation} media_type={data.media_type} url={data.url} data={data}/>)
 
+    })
+  }
+
+  const showClearDIalog = () => {
+    setShowModal({
+      state: true,
+      variant: '',
+      type:'dialog',
+      message: []
+    })
+  }
+
+  const clearFavoriteList = () => {
+   
+    localStorage.removeItem(FAVORITES)
+    setShowModal({
+      state: false,
+      variant: '',
+      type:'dialog',
+      message: []
     })
   }
 
@@ -62,23 +81,58 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
         closeModal={() => {
           setShowModal({...showModal, state: false});
         }}
-      >  <h2 style={{ color: 'black' }}>{showModal.message}</h2></Modal>
+      >  {showModal.type === 'dialog' ? 
+      
+      <div className=''>
+        <h3>Are you sure you want to clear your favourites</h3>
+        <Button
+         key={1}
+          ClickHandler={(e) => { clearFavoriteList()}}
+          classes='button--mini margin-left-5'
+          title='view all favourites padding-left-right'
+        >
+          <i className='fa fa-eye my-auto' aria-hidden='true'> {" " } Yes</i> {/* fa-heart */}
+        </Button>
+
+       <Button
+        key={2}
+          ClickHandler={() => showClearDIalog()}
+          classes='button--mini margin-left-5'
+          title='view all favourites padding-left-right'
+        >
+          <i className='fa fa-eye my-auto' aria-hidden='true'> {" " } No</i> {/* fa-heart */}
+        </Button>
+      </div> :
+      
+      <div style={{ display: 'flex' , flexWrap:'wrap' }}>{showModal.message}</div>}
+      </Modal>
       <div className='container space-between-header'>
         <h3 className='header__brand'>P-Hero Nasa Facts</h3>
 
         <div className='custom-date-picker'>
-          <span>Select Date: </span>
+          <span>Select By Date: </span>
           <input
             type='date'
             // ref={myDate}
             max={maxDate}
             onChange={(e) => handleSetDate(e)}
-          /> <Button
+          />
+          <Button
+          key={3}
           ClickHandler={() => showFavoriteList()}
           classes='button--mini margin-left-5'
           title='view all favourites padding-left-right'
         >
-          <i className='fa fa-eye my-auto' aria-hidden='true'>View All Favourites</i> {/* fa-heart */}
+          <i className='fa fa-eye my-auto' aria-hidden='true'> {" " } View All Favourites</i> {/* fa-heart */}
+        </Button>
+
+        <Button
+        key={4}
+          ClickHandler={() => showClearDIalog()}
+          classes='button--mini margin-left-5'
+          title='view all favourites padding-left-right'
+        >
+          <i className='fa fa-window-close-o my-auto' aria-hidden='true'> {" " }Clear All Favourites</i> {/* fa-heart */}
         </Button>
 
 

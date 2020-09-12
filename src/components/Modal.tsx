@@ -22,7 +22,7 @@ type NoResultProps = {
         <Backdrop show={showModal}  closeBackdrop={closeModal}/>
         <div className={`Modal ${variant}` }
         style={{
-            transform:showModal ? 'translateY(0)' : 'translateY(-100vh)',
+            transform:showModal ? 'translateY(0)' : 'translateY(-1000vh)',
             opacity :showModal ? 1 : 0
         }}
     >

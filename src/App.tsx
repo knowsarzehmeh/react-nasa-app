@@ -16,6 +16,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Loader from './components/Loader';
 import Error from './components/Error/Error';
 // import Modal from './components/Modal';
+import formatDate from './helper/formatDate';
 
 function App(props: any) {
   const [loading, setLoading] = useState(true);
@@ -24,10 +25,7 @@ function App(props: any) {
     month = date.getMonth() + 1,
     day = date.getDate();
 
-  const addZeros = (num: number): string =>
-    num < 10 ? `0${num}` : num.toString();
-
-  const today: string = `${year}-${addZeros(month)}-${addZeros(day)}`;
+  const today: string = formatDate(date);
 
   useEffect(() => {
 

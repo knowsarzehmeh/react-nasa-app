@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from './Button';
 import { FAVORITES } from '../store/types/index';
-import Modal from './Modal';
+import ModalComponent from './Modal';
+import { startFetchApod } from '../store/actions/apod';
+import { connect } from 'react-redux';
+
+import formatDate from '../helper/formatDate';
 // import Loader from './Loader';
 // import Error from './Error/Error';
 
@@ -18,9 +22,30 @@ type ApodProps = {
   };
 };
 
-const Apod: React.FC<ApodProps> = ({ data }) => {
+const Apod: React.FC<ApodProps> = ({ data, ...props }) => {
   // if (!data) return <Loader />;
-  const [showModal, setShowModal] = React.useState({ state: false, variant: 'small', message:''});
+  const [showModal, setShowModal] = useState({
+    state: false,
+    variant: 'small',
+    message: '',
+  });
+
+  const [queryDate, setQueryDate] = useState('');
+  const [disableButton, setDisableButton] = useState(false);
+
+  const checkDateDiff = () => {
+    const date = new Date(queryDate);
+    const today = new Date();
+    if (!queryDate && today) {
+      setDisableButton(true);
+    } else if (today.getDate() === date.getDate()) {
+      setDisableButton(true);
+    }
+  };
+
+  useEffect(() => {
+    checkDateDiff();
+  }, [queryDate]);
 
   const toggleFavorite = (data: any) => {
     let favorites: object[] = [];
@@ -28,7 +53,6 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
     let favoritesStore = localStorage.getItem(FAVORITES);
 
     if (favoritesStore === null) {
-      alert('Store Empty');
       favorites.push(data);
       localStorage.setItem(FAVORITES, JSON.stringify(favorites));
     } else {
@@ -46,27 +70,71 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
       if (found === -1) {
         favorites.push(data);
         localStorage.setItem(FAVORITES, JSON.stringify(favorites));
-        setShowModal({state: true, variant: 'small', message: "Marked as Favourite"})
+        setShowModal({
+          state: true,
+          variant: 'small',
+          message: 'Marked as Favourite',
+        });
       } else {
         //  remove from favorite
         favorites.splice(found, 1);
         localStorage.setItem(FAVORITES, JSON.stringify(favorites));
-        setShowModal({state: true, variant: 'small', message: "Unmarked as Favourite"})
+        setShowModal({
+          state: true,
+          variant: 'small',
+          message: 'Unmarked as Favourite',
+        });
       }
     }
   };
 
+  const loadFromPreviousDay = () => {
+    let day: number = new Date().getDate();
+
+    if (!queryDate) {
+      day -= 1;
+      day = new Date().setDate(day);
+    } else {
+      const prevDay = new Date(queryDate).getDate();
+      day = prevDay - 1;
+      day = new Date().setDate(day);
+    }
+    const date = formatDate(new Date(day));
+    setQueryDate(date);
+    setDisableButton(false);
+    (props as any).queryApod(date);
+  };
+
+  const loadFromNextDay = () => {
+    let today: Date = new Date();
+    let day: number = today.getDate();
+
+    checkDateDiff();
+
+    if (!queryDate) {
+      day += 1;
+      day = new Date().setDate(day);
+    } else {
+      const nextDay = new Date(queryDate).getDate();
+      day = nextDay + 1;
+      day = new Date().setDate(day);
+    }
+    const date = formatDate(new Date(day));
+    setQueryDate(date);
+    (props as any).queryApod(date);
+  };
+
   return (
     <div className='container-fluid'>
-      <Modal
+      <ModalComponent
         showModal={showModal.state}
         variant={showModal.variant}
         closeModal={() => {
-          setShowModal({...showModal, state: false});
+          setShowModal({ ...showModal, state: false });
         }}
       >
         <h2 style={{ color: 'black' }}>{showModal.message}</h2>
-      </Modal>
+      </ModalComponent>
       <aside className='brand-aside'>
         <h3>The Astronomical picture of the day</h3>
       </aside>
@@ -102,8 +170,20 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
             </h3>
             <p className='apod__explanation'>{data && data.explanation}</p>
             <div className='controls'>
-              <Button classes='button--prev cursor-pointer'>Prev Day</Button>
-              <Button classes='button--next cursor-pointer'>Next Day</Button>
+              <Button
+               key='s'
+                ClickHandler={loadFromPreviousDay}
+                classes='button--prev cursor-pointer'
+              >
+                Prev Day
+              </Button>
+              <Button
+                disabled={disableButton}
+                ClickHandler={loadFromNextDay}
+                classes='button--next cursor-pointer'
+              >
+                Next Day
+              </Button>
               {/* <Error /> */}
             </div>
           </div>
@@ -113,4 +193,8 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
   );
 };
 
-export default Apod;
+const mapDispatchToProps = (dispatch: any) => ({
+  queryApod: (date?: string) => dispatch(startFetchApod(date)),
+});
+
+export default connect(undefined, mapDispatchToProps)(Apod);
