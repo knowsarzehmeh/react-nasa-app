@@ -55,7 +55,7 @@ function App(props: any) {
     return <Loader />;
   } else {
     return (
-      <div>
+      <div className='padding-left-right'>
         <Header date={date} setDate={setDate} />
         <Apod data={props.apod.data} />
       </div>
