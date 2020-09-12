@@ -4,7 +4,8 @@
   color: $white;
   padding: $s-size;
   position: absolute;
-
+  border: 2px solid $blue;
+  
   &:hover {
     border: 2px solid $blue;
     background-color: $white;

@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useState , useEffect} from 'react';
 import { FAVORITES } from '../store/types';
 import Modal from './Modal';
 
@@ -13,7 +13,7 @@ type CardProps = {
     url?: string;
     hdurl?: string;
     data:any;
-    ClickHandler?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    ClickHandler?: any
   };
 
 const Card: React.FC<CardProps> = ({
@@ -29,6 +29,31 @@ const Card: React.FC<CardProps> = ({
         variant: 'small',
         message: '',
       });
+      const [isFavorite, setIsFavorite] = useState(false);
+
+      useEffect(() => {
+        checkIsFavorite(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [ isFavorite, data]);
+
+      const checkIsFavorite = (data: any) => {
+        let favorites: object[] = [];
+        // check get item is the store
+        let favoritesStore = localStorage.getItem(FAVORITES);
+    
+        if (favoritesStore === null) return;
+    
+        // item in the favorite store
+        const storeData: string | null = localStorage.getItem(FAVORITES);
+    
+        favorites = storeData !== null && JSON.parse(storeData);
+    
+        const found = favorites.findIndex(
+          (item: any) => item.title === data.title || item.url === data.url
+        );
+    
+        found !== -1 ? setIsFavorite(true) : setIsFavorite(false);
+      };
 
     const toggleFavorite = (data: any) => {
 
@@ -59,6 +84,7 @@ const Card: React.FC<CardProps> = ({
               variant: 'small',
               message: 'Marked as Favourite',
             });
+            setIsFavorite(true);
           } else {
             //  remove from favorite
             favorites.splice(found, 1);
@@ -68,6 +94,7 @@ const Card: React.FC<CardProps> = ({
               variant: 'small',
               message: 'Unmarked as Favourite',
             });
+            setIsFavorite(false);
           }
         }
       };
@@ -84,12 +111,13 @@ const Card: React.FC<CardProps> = ({
         <h2 style={{ color: 'black' }}>{showModal.message}</h2>
       </Modal>
     <div className="property-card">
-      <div>
+      <div  onClick={()=> ClickHandler(data.date)}>
         <div>
         { media_type === 'image' ? (
             <img src={url} className='media' alt={title} />
           ) : (
             <iframe
+             
               title={title}
               src={url}
               frameBorder='0'
@@ -112,7 +140,7 @@ const Card: React.FC<CardProps> = ({
     
     
         <div className="property-social-icons" onClick={()=> toggleFavorite(data)}>
-        <i className='fa fa-heart-o' aria-hidden='true'></i> {/* fa-heart */}
+        <i  className={isFavorite ? 'fa fa-heart' : 'fa fa-heart-o'}  aria-hidden='true'></i> {/* fa-heart */}
         </div>
       </div>
     </div>
