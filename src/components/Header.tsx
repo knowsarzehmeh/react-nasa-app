@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect, useRef, useState} from 'react';
 import DatePicker from 'react-datepicker';
 
 type HeaderProps = {
@@ -7,6 +7,25 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
+  const [ maxDate, setMaxDate] = useState('')
+  const myDate:any = useRef();
+  useEffect(() => {
+   disableFutureDate()
+  }, [])
+
+  const disableFutureDate = () => {
+    let dtToday = new Date();
+    let month:any = dtToday.getMonth() + 1;
+    let day:any = dtToday.getDate();
+    let year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    let maxDate = year + '-' + month + '-' + day;
+    setMaxDate(maxDate)
+  } 
+
   return (
     <header className='header'>
       <div className='container space-between-header'>
@@ -20,6 +39,8 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
           <span>Select Date: </span>
           <input
             type='date'
+            ref={myDate}
+            max={maxDate}
             onChange={(e) => setDate(new Date(e.target.value))}
           />
         </div>
