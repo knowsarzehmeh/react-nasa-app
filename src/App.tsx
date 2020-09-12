@@ -12,6 +12,7 @@ import Apod from './components/Apod';
 import './styles/App.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import Loader from './components/Loader';
+import Error from './components/Error/Error';
 // import Modal from './components/Modal';
 
 function App(props: any) {
@@ -65,7 +66,14 @@ function App(props: any) {
   }
 
   if (props.apod && (props.apod.error || !props.apod.data)) {
-    return <Loader />;
+    return(
+      <div className='center-flex'>
+     <Error 
+    errorMessage={props.apod.error}
+    onClick={ () => window.location.reload()}
+    actionTitle='refresh'  />
+    </div>
+    );
   } else {
     return (
       <div className='padding-left-right'>
