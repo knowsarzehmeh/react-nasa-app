@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button from './Button';
+import { FAVORITES } from '../store/types/index';
 // import Loader from './Loader';
 // import Error from './Error/Error';
 
@@ -19,13 +20,51 @@ type ApodProps = {
 const Apod: React.FC<ApodProps> = ({ data }) => {
   // if (!data) return <Loader />;
 
+  const toggleFavorite = (data: any) => {
+    let favorites: object[] = [];
+    // check get item is the store
+    let favoritesStore = localStorage.getItem(FAVORITES);
+
+    if (favoritesStore === null) {
+      alert('Store Empty');
+      favorites.push(data);
+      localStorage.setItem(FAVORITES, JSON.stringify(favorites));
+    } else {
+      // item in the favorite store
+      const storeData: string | null = localStorage.getItem(FAVORITES);
+
+      favorites = storeData !== null && JSON.parse(storeData);
+
+      // if item exist in the store
+      const found: number = favorites.findIndex(
+        (item: any) => item.title === data.title || item.url === data.url
+      );
+
+      // if item not in the store
+      if (found === -1) {
+        favorites.push(data);
+        localStorage.setItem(FAVORITES, JSON.stringify(favorites));
+        alert('Item Favorited');
+      } else {
+        //  remove from favorite
+        favorites.splice(found, 1);
+        localStorage.setItem(FAVORITES, JSON.stringify(favorites));
+        alert('Items removed');
+      }
+    }
+  };
+
   return (
     <div className='container-fluid'>
       <aside className='brand-aside'>
         <h3>The Astronomical picture of the day</h3>
       </aside>
       <div className='apod'>
-        <Button classes='button--favorite' title='mark as favorite'>
+        <Button
+          ClickHandler={() => toggleFavorite(data)}
+          classes='button--favorite'
+          title='mark as favorite'
+        >
           <i className='fa fa-heart-o' aria-hidden='true'></i> {/* fa-heart */}
         </Button>
         <div className='apod__media col-7'>
@@ -33,7 +72,7 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
             <img src={data.url} className='media' alt='' />
           ) : (
             <iframe
-              title='space-video'
+              title={data.title}
               src={data.url}
               frameBorder='0'
               // gesture="media"
