@@ -24,6 +24,12 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
     setMaxDate(maxDate);
   };
 
+  const handleSetDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const date = new Date(event.target.value);
+    console.log('date', date);
+    !date ? alert('Date not in the right format') : setDate(date);
+  };
+
   return (
     <header className='header'>
       <div className='container space-between-header'>
@@ -35,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
             type='date'
             // ref={myDate}
             max={maxDate}
-            onChange={(e) => setDate(new Date(e.target.value))}
+            onChange={(e) => handleSetDate(e)}
           />
         </div>
       </div>
