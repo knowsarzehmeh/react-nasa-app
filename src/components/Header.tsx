@@ -36,12 +36,7 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
 
         <div className='custom-date-picker'>
           <span>Select By Date: </span>
-          <input
-            type='date'
-            // ref={myDate}
-            max={maxDate}
-            onChange={(e) => handleSetDate(e)}
-          />
+          <input type='date' max={maxDate} onChange={(e) => handleSetDate(e)} />
         </div>
       </div>
     </header>
