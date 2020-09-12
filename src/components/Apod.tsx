@@ -20,7 +20,7 @@ type ApodProps = {
 
 const Apod: React.FC<ApodProps> = ({ data }) => {
   // if (!data) return <Loader />;
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = React.useState({ state: false, variant: 'small', message:''});
 
   const toggleFavorite = (data: any) => {
     let favorites: object[] = [];
@@ -46,12 +46,12 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
       if (found === -1) {
         favorites.push(data);
         localStorage.setItem(FAVORITES, JSON.stringify(favorites));
-        alert('Item Favorited');
+        setShowModal({state: true, variant: 'small', message: "Marked as Favourite"})
       } else {
         //  remove from favorite
         favorites.splice(found, 1);
         localStorage.setItem(FAVORITES, JSON.stringify(favorites));
-        alert('Items removed');
+        setShowModal({state: true, variant: 'small', message: "Unmarked as Favourite"})
       }
     }
   };
@@ -59,12 +59,13 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
   return (
     <div className='container-fluid'>
       <Modal
-        showModal={showModal}
+        showModal={showModal.state}
+        variant={showModal.variant}
         closeModal={() => {
-          setShowModal(false);
+          setShowModal({...showModal, state: false});
         }}
       >
-        <div style={{ color: 'black' }}>Alert</div>
+        <h2 style={{ color: 'black' }}>{showModal.message}</h2>
       </Modal>
       <aside className='brand-aside'>
         <h3>The Astronomical picture of the day</h3>
