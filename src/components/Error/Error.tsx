@@ -17,7 +17,7 @@ const Error: React.FC<NoResultProps> = ({
       <h3>{errorMessage || 'Opps something went wrong :('}</h3>
 
       <div>
-        <img src={ErrorSvg} alt='No Result' />
+        <img src={ErrorSvg} alt='No Result' width='300' height='300' />
       </div>
 
       <div onClick={onClick}>
