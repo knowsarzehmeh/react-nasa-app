@@ -34,7 +34,10 @@ function App(props: any) {
     ) {
       console.log('Fetching From Api...');
       props.fetchApod(today).then((result: any) => {
-        if (date.getDate() === new Date().getDate()) {
+        if (
+          date.getDate() === new Date().getDate() &&
+          typeof result !== undefined
+        ) {
           localStorage.setItem('poftd', JSON.stringify(result));
         }
       });
