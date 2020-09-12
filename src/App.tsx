@@ -16,17 +16,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Loader from './components/Loader';
 import Error from './components/Error/Error';
 // import Modal from './components/Modal';
+import formatDate from './helper/formatDate';
 
 function App(props: any) {
-  let [date, setDate] = useState(new Date()),
-    year = date.getFullYear(),
-    month = date.getMonth() + 1,
-    day = date.getDate();
+  let [date, setDate] = useState(new Date());
 
-  const addZeros = (num: number): string =>
-    num < 10 ? `0${num}` : num.toString();
-
-  const today: string = `${year}-${addZeros(month)}-${addZeros(day)}`;
+  const today: string = formatDate(date);
 
   useEffect(() => {
     // load picture of the day from local storage

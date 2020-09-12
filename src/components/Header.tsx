@@ -26,8 +26,7 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
 
   const handleSetDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(event.target.value);
-    console.log('date', date);
-    !date ? alert('Date not in the right format') : setDate(date);
+    setDate(date);
   };
 
   return (
@@ -36,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ date, setDate }) => {
         <h3 className='header__brand'>P-Hero Nasa Facts</h3>
 
         <div className='custom-date-picker'>
-          <span>Select Date: </span>
+          <span>Select By Date: </span>
           <input
             type='date'
             // ref={myDate}

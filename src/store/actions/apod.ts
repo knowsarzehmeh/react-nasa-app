@@ -28,7 +28,7 @@ export const startFetchApod = (date: string = '') => async (dispatch: any) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.code);
+
     if (data && data.code === 400) {
       dispatch(throwError(data.msg));
     } else {

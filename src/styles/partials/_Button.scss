@@ -11,6 +11,12 @@
     color: $blue;
     transition: background-color 0.5s;
   }
+
+  &:disabled {
+    background-color: lighten($color: $blue, $amount: 30);
+    cursor: none;
+    pointer-events: none;
+  }
 }
 
 .button--prev {
