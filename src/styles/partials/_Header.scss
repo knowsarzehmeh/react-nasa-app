@@ -10,4 +10,9 @@
 .header__brand {
   font-size: $font-size-small;
   margin-right: 5rem;
+
+  @media (max-width: $sm-devices) {
+    font-size: $font-size-large;
+    margin-bottom: $s-size;
+  }
 }

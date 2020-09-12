@@ -18,7 +18,12 @@ const Header: React.FC<HeaderProps> = ({
   setDisabledButton,
 }) => {
   const [maxDate, setMaxDate] = useState('');
-  const [showModal, setShowModal] = useState({ state: false, variant: 'small', type:'', message: [<></>]});
+  const [showModal, setShowModal] = useState({
+    state: false,
+    variant: 'small',
+    type: '',
+    message: [<></>],
+  });
   // const [favourites , setFavourites] = useState([]);
   // const myDate:any = useRef();
   useEffect(() => {
@@ -39,7 +44,6 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleSetDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-  
     const date = new Date(event.target.value);
     if (new Date()) {
       setDisabledButton(true);
@@ -48,72 +52,91 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const showFavoriteList = async () => {
-
     //@ts-ignore
-    const favourites = JSON.parse(localStorage.getItem(FAVORITES))
-    if(favourites === null) return alert("You have no favourites")
+    const favourites = JSON.parse(localStorage.getItem(FAVORITES));
+    if (favourites === null) return alert('You have no favourites');
     setShowModal({
       state: true,
       variant: '',
-      type:'',
-      message: favourites.map((data:any) => <Card key={data.title} title={data.title} description={data.explanation} media_type={data.media_type} url={data.url} data={data}/>)
-
-    })
-  }
+      type: '',
+      message: favourites.map((data: any) => (
+        <Card
+          key={data.title}
+          title={data.title}
+          description={data.explanation}
+          media_type={data.media_type}
+          url={data.url}
+          data={data}
+        />
+      )),
+    });
+  };
 
   const showClearDIalog = () => {
     setShowModal({
       state: true,
       variant: '',
-      type:'dialog',
-      message: []
-    })
-  }
+      type: 'dialog',
+      message: [],
+    });
+  };
 
   const clearFavoriteList = () => {
-   
-    localStorage.removeItem(FAVORITES)
+    localStorage.removeItem(FAVORITES);
     setShowModal({
       state: false,
       variant: '',
-      type:'dialog',
-      message: []
-    })
-  }
+      type: 'dialog',
+      message: [],
+    });
+  };
 
   return (
-    
     <header className='header'>
-       <Modal
+      <Modal
         showModal={showModal.state}
         variant={showModal.variant}
         closeModal={() => {
-          setShowModal({...showModal, state: false});
+          setShowModal({ ...showModal, state: false });
         }}
-      >  {showModal.type === 'dialog' ? 
-      
-      <div className=''>
-        <h3>Are you sure you want to clear your favourites</h3>
-        <Button
-         key={1}
-          ClickHandler={(e) => { clearFavoriteList()}}
-          classes='button--mini margin-left-5'
-          title='view all favourites padding-left-right'
-        >
-          <i className='fa fa-eye my-auto' aria-hidden='true'> {" " } Yes</i> {/* fa-heart */}
-        </Button>
+      >
+        {' '}
+        {showModal.type === 'dialog' ? (
+          <div className=''>
+            <h3>Are you sure you want to clear your favourites</h3>
+            <Button
+              key={1}
+              ClickHandler={(e) => {
+                clearFavoriteList();
+              }}
+              classes='button--mini margin-left-5'
+              title='view all favourites padding-left-right'
+            >
+              <i className='fa fa-eye my-auto' aria-hidden='true'>
+                {' '}
+                Yes
+              </i>{' '}
+              {/* fa-heart */}
+            </Button>
 
-       <Button
-        key={2}
-          ClickHandler={() => showClearDIalog()}
-          classes='button--mini margin-left-5'
-          title='view all favourites padding-left-right'
-        >
-          <i className='fa fa-eye my-auto' aria-hidden='true'> {" " } No</i> {/* fa-heart */}
-        </Button>
-      </div> :
-      
-      <div style={{ display: 'flex' , flexWrap:'wrap' }}>{showModal.message}</div>}
+            <Button
+              key={2}
+              ClickHandler={() => showClearDIalog()}
+              classes='button--mini margin-left-5'
+              title='view all favourites padding-left-right'
+            >
+              <i className='fa fa-eye my-auto' aria-hidden='true'>
+                {' '}
+                No
+              </i>{' '}
+              {/* fa-heart */}
+            </Button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {showModal.message}
+          </div>
+        )}
       </Modal>
       <div className='container space-between-header'>
         <h3 className='header__brand'>P-Hero Nasa Facts</h3>
@@ -126,29 +149,34 @@ const Header: React.FC<HeaderProps> = ({
             max={maxDate}
             onChange={(e) => handleSetDate(e)}
           />
+
           <Button
-          key={3}
-          ClickHandler={() => showFavoriteList()}
-          classes='button--mini margin-left-5'
-          title='view all favourites padding-left-right'
-        >
-          <i className='fa fa-eye my-auto' aria-hidden='true'> {" " } View All Favourites</i> {/* fa-heart */}
-        </Button>
+            key={3}
+            ClickHandler={() => showFavoriteList()}
+            classes='button--mini margin-left-5'
+            title='view all favourites padding-left-right'
+          >
+            <i className='fa fa-eye my-auto' aria-hidden='true'>
+              {' '}
+              View All Favourites
+            </i>
+          </Button>
 
-        <Button
-        key={4}
-          ClickHandler={() => showClearDIalog()}
-          classes='button--mini margin-left-5'
-          title='view all favourites padding-left-right'
-        >
-          <i className='fa fa-window-close-o my-auto' aria-hidden='true'> {" " }Clear All Favourites</i> {/* fa-heart */}
-        </Button>
-
+          <Button
+            key={4}
+            ClickHandler={() => showClearDIalog()}
+            classes='button--mini margin-left-5'
+            title='view all favourites padding-left-right'
+          >
+            <i className='fa fa-window-close-o my-auto' aria-hidden='true'>
+              {' '}
+              Clear All Favourites
+            </i>{' '}
+            {/* fa-heart */}
+          </Button>
 
           {/* <input type='date' max={maxDate} onChange={(e) => handleSetDate(e)} /> */}
         </div>
-
-       
       </div>
     </header>
   );
