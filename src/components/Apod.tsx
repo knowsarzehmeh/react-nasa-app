@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from './Button';
 // import Loader from './Loader';
-import Error from './Error/Error';
+// import Error from './Error/Error';
 
 type ApodProps = {
   data: {
@@ -20,7 +20,7 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
   // if (!data) return <Loader />;
 
   return (
-    <div className='container'>
+    <div className='container-fluid'>
       <aside className='brand-aside'>
         <h3>The Astronomical picture of the day</h3>
       </aside>
@@ -28,11 +28,11 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
         <Button classes='button--favorite' title='mark as favorite'>
           <i className='fa fa-heart-o' aria-hidden='true'></i> {/* fa-heart */}
         </Button>
-        <div className='apod__media'>
+        <div className='apod__media col-7'>
           <img src={data && data.url} className='' alt='' />
         </div>
 
-        <div className='apod__details'>
+        <div className='apod__details col-4'>
           <h2 className='apod__title'> {data && data.title} </h2>
           <div style={{ position: 'relative' }}>
             <h3 className='apod__copyright'>
