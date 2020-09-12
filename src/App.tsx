@@ -13,10 +13,11 @@ import Apod from './components/Apod';
 
 import './styles/App.scss';
 import 'react-datepicker/dist/react-datepicker.css';
-import Loader from './components/Loader';
+// import Loader from './components/Loader';
 import Error from './components/Error/Error';
 // import Modal from './components/Modal';
 import formatDate from './helper/formatDate';
+import Loader from './components/Loader';
 
 function App(props: any) {
   const [loading, setLoading] = useState(true);
@@ -24,6 +25,8 @@ function App(props: any) {
     year = date.getFullYear(),
     month = date.getMonth() + 1,
     day = date.getDate();
+  // let [date, setDate] = useState(new Date());
+  const [disableButton, setDisableButton] = useState(false);
 
   const today: string = formatDate(date);
 
@@ -107,10 +110,19 @@ function App(props: any) {
         />
        </div>
        :
-     <>
-     <Header date={date} setDate={setDate} />
-     <Apod data={props.apod.data} />
-    </>
+       <div className='padding-left-right'>
+       <Header
+         disableButton={disableButton}
+         setDisabledButton={setDisableButton}
+         date={date}
+         setDate={setDate}
+       />
+       <Apod
+         disableButton={disableButton}
+         setDisabledButton={setDisableButton}
+         data={props.apod.data}
+       />
+     </div>
         }
        
       </div> 
