@@ -2,6 +2,7 @@ import React from 'react';
 
 import Button from './Button';
 import { FAVORITES } from '../store/types/index';
+import Modal from './Modal';
 // import Loader from './Loader';
 // import Error from './Error/Error';
 
@@ -19,6 +20,7 @@ type ApodProps = {
 
 const Apod: React.FC<ApodProps> = ({ data }) => {
   // if (!data) return <Loader />;
+  const [showModal, setShowModal] = React.useState(false);
 
   const toggleFavorite = (data: any) => {
     let favorites: object[] = [];
@@ -56,6 +58,14 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
 
   return (
     <div className='container-fluid'>
+      <Modal
+        showModal={showModal}
+        closeModal={() => {
+          setShowModal(false);
+        }}
+      >
+        <div style={{ color: 'black' }}>Alert</div>
+      </Modal>
       <aside className='brand-aside'>
         <h3>The Astronomical picture of the day</h3>
       </aside>
