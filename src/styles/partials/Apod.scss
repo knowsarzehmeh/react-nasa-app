@@ -5,8 +5,9 @@
 
   @media (max-width: 767.98px) {
     display: block;
+    flex-direction: column;
     position: inherit;
-   }
+  }
 }
 
 .apod__media {
@@ -14,7 +15,7 @@
   margin: 0 auto;
   margin-bottom: $s-size;
 
-  img {
+  .media {
     height: 100%;
     width: 100%;
   }
@@ -51,7 +52,7 @@
   @media (max-width: 767.98px) {
     left: 0;
     padding: 0;
-   }
+  }
 }
 
 .apod__explanation {
@@ -59,4 +60,3 @@
   line-height: 1.5;
   margin-bottom: $xl-size-pc;
 }
-

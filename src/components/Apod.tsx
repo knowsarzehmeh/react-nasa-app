@@ -29,7 +29,19 @@ const Apod: React.FC<ApodProps> = ({ data }) => {
           <i className='fa fa-heart-o' aria-hidden='true'></i> {/* fa-heart */}
         </Button>
         <div className='apod__media col-7'>
-          <img src={data && data.url} className='' alt='' />
+          {data && data.media_type === 'image' ? (
+            <img src={data.url} className='media' alt='' />
+          ) : (
+            <iframe
+              title='space-video'
+              src={data.url}
+              frameBorder='0'
+              // gesture="media"
+              allow='encrypted-media'
+              allowFullScreen
+              className='media'
+            />
+          )}
         </div>
 
         <div className='apod__details col-4'>
